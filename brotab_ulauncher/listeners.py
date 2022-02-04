@@ -1,6 +1,8 @@
 """
 Extension event listeners
 """
+import time
+from brotab_ulauncher.wmctrl import iter_windows, activate_window_by_id
 from ulauncher.api.client.EventListener import EventListener
 
 
@@ -18,6 +20,14 @@ class KeywordQueryEventListener(EventListener):
         return extension.search_tabs(event)
 
 
+def activate_window_with_title(title):
+    for id, name in iter_windows():
+        if title in name:
+            activate_window_by_id(id)
+            return
+    print(f"No window found with title '{title}'")
+
+
 class ItemEnterEventListener(EventListener):
     """ Listener that handles the click on an item """
 
@@ -27,6 +37,8 @@ class ItemEnterEventListener(EventListener):
         data = event.get_data()
         if data["mode"] == "activator":
             extension.brotab_client.activate_tab(data["tab"])
+            time.sleep(0.5)
+            activate_window_with_title(data["name"])
         if data["mode"] == "killer":
             try:
                 extension.brotab_client.close_tab(data["tab"])

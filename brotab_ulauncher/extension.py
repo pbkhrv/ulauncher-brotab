@@ -65,7 +65,7 @@ class BrotabExtension(Extension):
         tabs = self.brotab_client.search_tabs(event.get_argument())
 
         for tab in tabs[:DISPLAY_MAX_RESULTS]:
-            data = {"tab": tab["prefix"], "mode": self.mode}
+            data = {"tab": tab["prefix"], "mode": self.mode, "name": tab["name"]}
 
             items.append(
                 ExtensionSmallResultItem(
